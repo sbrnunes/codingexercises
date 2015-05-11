@@ -13,6 +13,11 @@ public class NumberOfIslands
 {
     public static int countNumberOfIslands(int[][] grid)
     {
+        if(grid == null || grid.length == 0 || grid[0].length == 0)
+        {
+            return 0;
+        }
+
         int count = 0;
 
         for (int i = 0; i < grid.length; i++)
