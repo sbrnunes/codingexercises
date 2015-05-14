@@ -1,7 +1,6 @@
 package graphs;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * There are a total of n courses you have to take, labeled from 0 to n - 1. Some courses may have prerequisites,
@@ -13,6 +12,7 @@ import java.util.Queue;
  */
 public class CourseSchedule
 {
+
     public static boolean isCourseSchedulePossible(int numberOfCourses, int[][] prerequisites)
     {
         if(prerequisites == null || prerequisites.length == 0)
@@ -23,9 +23,9 @@ public class CourseSchedule
         int[] numberOfPrerequisites = new int[numberOfCourses];
 
         //Number of prerequisites for each course
-        for (int i = 0; i < prerequisites.length; i++)
+        for (int[] prerequisite : prerequisites)
         {
-            numberOfPrerequisites[prerequisites[i][0]]++;
+            numberOfPrerequisites[prerequisite[0]]++;
         }
 
         Queue<Integer> queue = new LinkedList<>();
@@ -43,24 +43,122 @@ public class CourseSchedule
 
         while(!queue.isEmpty())
         {
-            Integer course = queue.poll();
+            int course = queue.poll();
 
-            for (int i = 0; i < prerequisites.length; i++)
+            for (int[] prerequisite : prerequisites)
             {
-                // if a course's prerequisite can be satisfied by a course in queue
-                if(prerequisites[i][1] == course)
+                // if a course's prerequisite can be satisfied by a course in the queue
+                if (prerequisite[1] == course)
                 {
-                    numberOfPrerequisites[prerequisites[i][0]]--;
+                    numberOfPrerequisites[prerequisite[0]]--;
 
-                    if(numberOfPrerequisites[prerequisites[i][0]] == 0)
+                    if (numberOfPrerequisites[prerequisite[0]] == 0)
                     {
                         coursesWithoutPrerequisites++;
-                        queue.add(prerequisites[i][0]);
+
+                        queue.add(prerequisite[0]);
                     }
                 }
             }
         }
 
         return coursesWithoutPrerequisites == numberOfCourses;
+    }
+
+    public static boolean isCourseSchedulePossible2(int numberOfCourses, int[][] prerequisites)
+    {
+        if(prerequisites == null || prerequisites.length == 0)
+        {
+            return true;
+        }
+
+        GraphNode[] nodes = new GraphNode[numberOfCourses];
+        for (int i = 0; i < numberOfCourses; i++)
+        {
+            nodes[i] = new GraphNode(i);
+        }
+
+        for (int[] prerequisite : prerequisites)
+        {
+            int course = prerequisite[0];
+            int dependency = prerequisite[1];
+
+            nodes[course].addNeighbour(nodes[dependency]);
+        }
+
+        Stack<GraphNode> stack = new Stack<>();
+
+        for (GraphNode node : nodes)
+        {
+            stack.push(node);
+            if (!canFinishCourse(stack))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static boolean canFinishCourse(Stack<GraphNode> stack)
+    {
+        if(stack.isEmpty())
+        {
+            return true;
+        }
+
+        GraphNode node = stack.pop();
+
+        if(node.isVisited())
+        {
+            return false;
+        }
+
+        node.setVisited(true);
+
+        for (GraphNode neighbour : node.getNeighbours())
+        {
+            stack.push(neighbour);
+            if(!canFinishCourse(stack))
+            {
+                return false;
+            }
+        }
+
+        node.setVisited(false);
+
+        return true;
+
+    }
+
+    private static class GraphNode
+    {
+        private int vertex;
+        private List<GraphNode> neighbours = new ArrayList<>();
+        boolean visited = false;
+
+        GraphNode(int vertex)
+        {
+            this.vertex = vertex;
+        }
+
+        public void addNeighbour(GraphNode neighbour) {
+            neighbours.add(neighbour);
+        }
+
+        public List<GraphNode> getNeighbours()
+        {
+            return neighbours;
+        }
+
+        public boolean isVisited()
+        {
+            return visited;
+        }
+
+        public void setVisited(boolean visited)
+        {
+            this.visited = visited;
+        }
     }
 }
