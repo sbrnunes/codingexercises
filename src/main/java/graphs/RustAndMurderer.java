@@ -28,6 +28,7 @@ public class RustAndMurderer
                 int destination = scanner.nextInt();
 
                 mainRoads[origin - 1][destination - 1] = 1;
+                mainRoads[destination - 1][origin - 1] = 1;
             }
 
             int start = scanner.nextInt() - 1;
