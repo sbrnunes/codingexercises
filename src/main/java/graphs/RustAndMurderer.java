@@ -28,6 +28,8 @@ public class RustAndMurderer
                 int destination = scanner.nextInt();
 
                 mainRoads[origin - 1][destination - 1] = 1;
+                // This graph is undirected, but you're treating it at a directed one.
+                // mainRoads[destination - 1][origin - 1] = 1;  // either include this line...
             }
 
             int start = scanner.nextInt() - 1;
@@ -82,7 +84,9 @@ public class RustAndMurderer
                     continue;
                 }
 
-                if(neighbour != node && map[node][neighbour] == VILLAGE_ROAD) //not main road
+                if(neighbour != node &&
+                   // ...or expand this condition
+                   (map[node][neighbour] == VILLAGE_ROAD || map[neighbour][node] == VILLAGE_ROAD)) //not main road
                 {
                     distanceToNodes[neighbour] = Math.min(distanceToNodes[neighbour], distanceToNodes[node] + ROAD_COST);
 
