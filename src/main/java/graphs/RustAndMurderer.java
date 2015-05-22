@@ -90,22 +90,17 @@ public class RustAndMurderer
 
         distanceToNodes[start] = 0;
 
+        adjacentMatrix[start][start] = DISCOVERED;
+
         Queue<Integer> queue = new PriorityQueue<>((node1, node2) -> {
-            return Integer.compare(distanceToNodes[node1], distanceToNodes[node2]);
-        });
+                    return Integer.compare(distanceToNodes[node1], distanceToNodes[node2]);
+                });
 
         queue.add(start);
 
         while(!queue.isEmpty())
         {
             Integer node = queue.poll();
-
-            if(adjacentMatrix[node][node] == DISCOVERED)
-            {
-                continue;
-            }
-
-            adjacentMatrix[node][node] = DISCOVERED; //node has been discovered
 
             for (int neighbour = 0; neighbour < adjacentMatrix[node].length; neighbour++)
             {
@@ -114,10 +109,11 @@ public class RustAndMurderer
                     continue;
                 }
 
-                if(adjacentMatrix[node][neighbour] == VILLAGE_ROAD) //not main road
+                if(adjacentMatrix[node][neighbour] == VILLAGE_ROAD)
                 {
-                    distanceToNodes[neighbour] = Math.min(distanceToNodes[neighbour], distanceToNodes[node] + ROAD_COST);
+                    adjacentMatrix[neighbour][neighbour] = DISCOVERED; //visit node
 
+                    distanceToNodes[neighbour] = Math.min(distanceToNodes[neighbour], distanceToNodes[node] + ROAD_COST);
                     queue.add(neighbour);
                 }
             }
