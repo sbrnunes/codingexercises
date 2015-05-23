@@ -1,6 +1,5 @@
 package heap;
 
-import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
@@ -13,31 +12,44 @@ public class FindMedian
 
         int nintegers = scanner.nextInt();
 
-        Queue<Integer> queue = new PriorityQueue<>();
+        MedianCalculator medianCalculator = new MedianCalculator();
 
         for (int i = 0; i < nintegers; i++) { //O(n)
-            queue.add(scanner.nextInt());
-            printMedian(queue);               //O(n * n log(n)) => O(n^2 log(n))
+            medianCalculator.addNumber(scanner.nextInt());
+            System.out.println(medianCalculator.calculateMedian());
         }
     }
 
-    private static void printMedian(Queue<Integer> integers) {
+    private static class MedianCalculator {
+        Queue<Integer> maxheap = new PriorityQueue<>((o1, o2) -> o2.compareTo(o1)); //ascending order
+        Queue<Integer> minheap = new PriorityQueue<>((o1, o2) -> o1.compareTo(o2)); //descending order
 
-        if(integers.size() == 1) {
-            System.out.println((double) integers.peek());
-            return;
+        public void addNumber(int number) {
+
+            if(maxheap.isEmpty() || number < maxheap.peek()) {
+                maxheap.add(number);
+            } else {
+                minheap.add(number);
+            }
+
+            //balance both sides
+            if(maxheap.size() > minheap.size() + 1) {
+                minheap.add(maxheap.poll());
+            }
+
+            if(minheap.size() > maxheap.size() + 1) {
+                maxheap.add(minheap.poll());
+            }
         }
 
-        Integer[] arr = integers.toArray(new Integer[integers.size()]);
-
-        Arrays.sort(arr); //O(n log(n))
-
-        int center = arr.length / 2;
-
-        if(arr.length % 2 == 0) {
-            System.out.println((arr[center - 1] + arr[center]) / 2.0);
-        } else {
-            System.out.println((double)arr[center]);
+        public double calculateMedian()
+        {
+            if(maxheap.size() == minheap.size()) {
+                return (maxheap.peek() + minheap.peek()) / 2.0;
+            }
+            else {
+                return (double) maxheap.size() > minheap.size() ? maxheap.peek() : minheap.peek();
+            }
         }
     }
 }
