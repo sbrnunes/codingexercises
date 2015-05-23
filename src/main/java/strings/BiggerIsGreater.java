@@ -1,6 +1,7 @@
 package strings;
 
 import java.util.Scanner;
+import java.util.TreeSet;
 
 public class BiggerIsGreater
 {
@@ -15,7 +16,8 @@ public class BiggerIsGreater
         {
             String str = scanner.nextLine();
 
-            String result = lowestLexicographicallyBiggerPermutation(str);
+            String result = lowestPermutationBiggerThan(str);
+
             if(result == null)
             {
                 System.out.println("no answer");
@@ -27,56 +29,28 @@ public class BiggerIsGreater
         }
     }
 
-    public static String lowestLexicographicallyBiggerPermutation(String original) {
-        return lowestLexicographicallyBiggerPermutation(original, "", original);
+    public static String lowestPermutationBiggerThan(String original) {
+        TreeSet<String> permutations = new TreeSet<>();
+        permutations.add(original);
+
+        recursivePermute("", original, permutations);
+
+        return permutations.higher(original);
     }
 
-    private static String lowestLexicographicallyBiggerPermutation(String original, String current, String suffix) {
-        int suffixLength = suffix.length();
+    private static void recursivePermute(String prefix, String suffix, TreeSet<String> permutations) {
 
-        if (suffixLength == 0)
-        {
-            if(current.compareTo(original) > 0)
+        if(suffix.isEmpty()) {
+            if(prefix.compareTo(permutations.first()) > 0)
             {
-                return current;
+                permutations.add(prefix);
             }
-
-            return null;
         }
         else {
-            String currentLowestPermutation = null;
-
-            for (int i = 0; i < suffixLength; i++)
+            for (int i = 0; i < suffix.length(); i++)
             {
-                String prefix = current + suffix.charAt(i);
-
-                // if permutation is going to be lexicographically lower than original or bigger than the lowest permutation already found
-                if(isNotValidPermutation(prefix, original, currentLowestPermutation))
-                {
-                    continue;
-                }
-
-                // call recursive method again, with a new permutation of the suffix
-                String permutation = lowestLexicographicallyBiggerPermutation(original, prefix, suffix.substring(0, i) + suffix.substring(i + 1, suffixLength));
-
-                if(currentLowestPermutation == null || isLexicographicallyLower(permutation, currentLowestPermutation)) {
-                    currentLowestPermutation = permutation;
-                }
+                recursivePermute(prefix + suffix.charAt(i), suffix.substring(0, i) + suffix.substring(i + 1), permutations);
             }
-
-            return currentLowestPermutation;
         }
-    }
-
-    private static boolean isNotValidPermutation(String prefix, String original, String currentLowestPermutation)
-    {
-        return prefix.compareTo(original.substring(0, prefix.length())) < 0 ||
-                currentLowestPermutation != null && isLexicographicallyLower(currentLowestPermutation.substring(0, prefix.length()), prefix);
-    }
-
-    private static boolean isLexicographicallyLower(String permutation1, String permutation2)
-    {
-        return permutation1 != null && permutation1.compareTo(permutation2) < 0;
-
     }
 }
