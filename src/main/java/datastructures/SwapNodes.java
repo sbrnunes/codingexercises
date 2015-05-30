@@ -63,6 +63,7 @@ public class SwapNodes
         }
     }
 
+    //In-Order traverse and swap
     private static void findAndSwap(Stack<TreeNode> stack, int currentLevel, int levelToSwap)
     {
         currentLevel++;
