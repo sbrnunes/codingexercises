@@ -23,28 +23,80 @@ public class MaximiseSum
             }
 
             System.out.println(maxSoFar(integers, modulo));
+            System.out.println(findMaximumSubarray(integers, 0, size - 1, modulo));
         }
     }
 
     //Kadane’s Algorithm:
     private static long maxSoFar(long[] arr, long modulo)
     {
-        long max_so_far = 0;
-        long max_ending_here = 0;
+        long maxSoFar = 0;
+        long maxEndingHere = 0;
 
+        for (long current : arr)
+        {
+            maxEndingHere = (maxEndingHere + current) % modulo;
 
-        for (int i = 0; i < arr.length; i++) {
-            max_ending_here = (max_ending_here + arr[i]) % modulo;
-
-            if(max_ending_here < 0) {
-                max_ending_here = 0;
+            if (maxEndingHere < 0)
+            {
+                maxEndingHere = 0;
             }
 
-            if(max_so_far < max_ending_here) {
-                max_so_far = max_ending_here;
+            maxSoFar = Math.max(maxSoFar, maxEndingHere);
+        }
+
+        return maxSoFar;
+    }
+
+    //Divide and Conquer algorithm from Cormen
+    private static long findMaximumSubarray(long[] arr, int low, int high, long modulo) {
+
+        if(low == high) {
+            return arr[low];
+        }
+        else {
+
+            int middle = (low + high) / 2;
+
+            long leftSum = findMaximumSubarray(arr, low, middle, modulo);
+            long rightSum = findMaximumSubarray(arr, middle + 1, high, modulo);
+            long crossSum = findMaximumCrossingSubarray(arr, low, middle, high, modulo);
+
+            if(leftSum % modulo >= rightSum % modulo && leftSum % modulo >= crossSum % modulo) {
+                return leftSum % modulo;
+            }
+            else if(rightSum % modulo >= leftSum % modulo && rightSum % modulo >= crossSum % modulo) {
+                return rightSum % modulo;
+            }
+            else {
+                return crossSum % modulo;
+            }
+        }
+    }
+
+    private static long findMaximumCrossingSubarray(long[] arr, int low, int middle, int high, long modulo) {
+        long leftSum = Long.MIN_VALUE;
+        long sum = 0;
+
+        for(int i = middle; i >= low; i-- ) {
+            sum += arr[i];
+
+            if(sum > leftSum) {
+                leftSum = sum;
             }
         }
 
-        return max_so_far;
+        long rightSum = Long.MIN_VALUE;
+        sum = 0;
+
+        for(int j = middle + 1; j <= high; j++ ) {
+            sum += arr[j];
+
+            if(sum > rightSum) {
+                rightSum = sum;
+            }
+        }
+
+        return leftSum + rightSum;
     }
 }
