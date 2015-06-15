@@ -1,0 +1,19 @@
+
+
+
+void bfs(node start) {
+    queue<node> s; //FIFO
+    s.push(start);
+
+    mark start as visited
+
+    while (s.empty() == false) {
+        top = s.front();
+        s.pop();
+
+        check for termination condition (have we reached the node we want to?)
+
+        add all of top's unvisited neighbors to the queue
+        mark all of top's unvisited neighbors as visited
+    }
+}

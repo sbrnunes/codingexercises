@@ -1,0 +1,20 @@
+
+private static long maxSoFar(long[] arr)
+{
+    long maxSoFar = 0;
+    long maxEndingHere = 0;
+
+    for (long current : arr)
+    {
+        maxEndingHere += current;
+
+        if (maxEndingHere < 0)
+        {
+            maxEndingHere = 0;
+        }
+
+        maxSoFar = Math.max(maxSoFar, maxEndingHere);
+    }
+
+    return maxSoFar;
+}
