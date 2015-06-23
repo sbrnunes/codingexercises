@@ -25,7 +25,6 @@ public class Pairs2
 
     private static long countPairsWhithDiff(Set<Integer> integers, int diff)
     {
-        return integers.stream().filter(integer -> integers.contains(integer + diff)) // n ? contains is O(1), what about filter ?
-                .count(); // O(1) ?
+        return integers.stream().filter(integer -> integers.contains(integer + diff)).count();
     }
 }
