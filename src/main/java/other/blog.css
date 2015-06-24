@@ -1,0 +1,11 @@
+.post .content {
+    font-size: 14pt; //em
+}
+
+.post .submitButton {
+    padding: 5px;
+    background-color: red;
+    border-radius: 4pt;
+    color: white;
+    font-weight: bold;
+}

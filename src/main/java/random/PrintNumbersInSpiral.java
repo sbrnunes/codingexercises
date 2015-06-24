@@ -2,15 +2,15 @@ package random;
 
 public class PrintNumbersInSpiral
 {
-    public static final int X_SIZE = 4;
-    public static final int Y_SIZE = 4;
+    public static final int ROWS = 4;
+    public static final int COLUMNS = 4;
 
     public static void main(String[] args) {
-        int[][] array = new int[X_SIZE][Y_SIZE];
+        int[][] array = new int[ROWS][COLUMNS];
 
-        for(int i = 0; i < X_SIZE; i++){
-            for (int j = 0; j < Y_SIZE; j++){
-                array[i][j] = i * X_SIZE + (j + 1);
+        for(int i = 0; i < ROWS; i++){
+            for (int j = 0; j < COLUMNS; j++){
+                array[i][j] = i * ROWS + j + 1;
                 System.out.print(array[i][j] + " ");
             }
             System.out.println();
@@ -19,36 +19,36 @@ public class PrintNumbersInSpiral
         System.out.println("************");
         System.out.println("Spiral");
 
-        spiralPrint(X_SIZE, Y_SIZE, array);
+        spiralPrint(ROWS, COLUMNS, array);
     }
 
-    public static void spiralPrint(int xSize, int ySize, int matrix[][]){
-        int i,  k = 0, l = 0;
-        xSize--;  ySize--;
+    public static void spiralPrint(int rows, int columns, int[][] matrix){
+        rows--;
+        columns--;
 
-        while(k <= xSize && l <= ySize){
-            for(i = l; i <= ySize; ++i) {
-                System.out.print(matrix[k][i]+ " ");
+        int row = 0;
+        int column = 0;
+        while(row <= rows && column <= columns){
+            for(int i = column; i <= columns; ++i) {
+                System.out.print(matrix[row][i]+ " ");
             }
-            k++;
+            row++;
 
-            for(i = k; i <= xSize; ++i) {
-                System.out.print(matrix[i][ySize] + " ");
+            for(int i = row; i <= rows; ++i) {
+                System.out.print(matrix[i][columns] + " ");
             }
-            ySize--;
+            columns--;
 
-            for(i = ySize; i >= l; --i) {
-                    System.out.print(matrix[xSize][i] + " ");
+            for(int i = columns; i >= column; --i) {
+                    System.out.print(matrix[rows][i] + " ");
             }
-            xSize--;
+            rows--;
 
 
-            for(i = xSize; i >= k; --i) {
-                System.out.print(matrix[i][l] + " ");
+            for(int i = rows; i >= row; --i) {
+                System.out.print(matrix[i][column] + " ");
             }
-            l++;
+            column++;
         }
     }
-
-
 }
