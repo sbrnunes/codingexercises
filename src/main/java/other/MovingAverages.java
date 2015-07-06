@@ -2,6 +2,12 @@ package other;
 
 import java.util.Scanner;
 
+/**
+ * A ideia deste exercicio e calcular a media dos algarismos de uma janela deslizante. 
+ * 
+ * A janela desliza uma posicao de cada vez, quando atinge o final do array, encolhe ate incluir apenas a ultima 
+ * posicao do array.
+ */
 public class MovingAverages {
 
    public static void main(String[] args) {
