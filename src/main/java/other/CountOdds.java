@@ -2,6 +2,10 @@ package other;
 
 import java.util.Arrays;
 
+/**
+ * A ideia deste exercicio e devolver o primeiro digito que aparece no array um numero impar de vezes.
+ * Caso o algarismo nao seja encontrado, -1 deve ser devolvido.
+ */ 
 public class CountOdds
 {
     public static void main(String[] args) {

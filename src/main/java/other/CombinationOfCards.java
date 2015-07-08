@@ -4,6 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
+/**
+ * A ideia deste exercicio e obter uma combinacao de 4 cartas cujo valor seja 24.
+ * O valor das cartas e de 1 a 10 (em que o As vale 1), sendo que todas as cartas faceadas valem 10 (valete, dama e rei).
+ */
 public class CombinationOfCards
 {
     public static void main(String[] args) {
