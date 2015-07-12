@@ -1,7 +1,6 @@
 package strings;
 
-import java.util.Scanner;
-import java.util.TreeSet;
+import java.util.*;
 
 public class BiggerIsGreater
 {
@@ -18,7 +17,7 @@ public class BiggerIsGreater
 
             String result = lowestPermutationBiggerThan(str);
 
-            if(result == null)
+            if(result.isEmpty())
             {
                 System.out.println("no answer");
             }
@@ -30,27 +29,39 @@ public class BiggerIsGreater
     }
 
     public static String lowestPermutationBiggerThan(String original) {
-        TreeSet<String> permutations = new TreeSet<>();
-        permutations.add(original);
-
-        recursivePermute("", original, permutations);
-
-        return permutations.higher(original);
+        return permute(original);
     }
 
-    private static void recursivePermute(String prefix, String suffix, TreeSet<String> permutations) {
+    private static String permute(String original){
 
-        if(suffix.isEmpty()) {
-            if(prefix.compareTo(permutations.first()) > 0)
+        String result = "";
+
+        Set<String> permutations = new HashSet<>();
+
+        Stack<String> stack = new Stack<>();
+
+        stack.push(original);
+
+        while(!stack.isEmpty()) {
+
+            String str = stack.pop();
+
+            for (int i = 0; i < str.length(); i++)
             {
-                permutations.add(prefix);
+                String permutation = str.charAt(i) + str.substring(0, i) + str.substring(i + 1);
+
+                if(permutations.add(permutation)) {
+                    stack.push(permutation);
+
+                    if(permutation.compareTo(original) > 0) {
+                        if(result.isEmpty() || permutation.compareTo(result) < 0) {
+                            result = permutation;
+                        }
+                    }
+                }
             }
         }
-        else {
-            for (int i = 0; i < suffix.length(); i++)
-            {
-                recursivePermute(prefix + suffix.charAt(i), suffix.substring(0, i) + suffix.substring(i + 1), permutations);
-            }
-        }
+
+        return result;
     }
 }
